@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const UserSchema = require('./models/userSchema');
+const BicycleSchema = require('./models/bicycleSchema');
 
 const app = express();
 
@@ -62,6 +63,41 @@ app.post('/register', (req, res) => {
     res.json({
       message: 'created',
       user
+    });
+  });
+});
+
+app.get('/bicycles', (req, res) => {
+  BicycleSchema.find({}, (err, bicycle) => {
+    if (err) return res.status(500).json({ message: err });
+    if (!bicycle) return res.status(400).json({ message: 'Not found' });
+
+    res.status(200);
+    res.json({
+      bicycle
+    });
+  });
+});
+
+app.post('/bicycles', (req, res) => {
+  const { marca, aro, nombre, tipo, imagenURL, especificaciones } = req.body;
+
+  const bicycle = new BicycleSchema({
+    marca,
+    aro,
+    nombre,
+    tipo,
+    imagenURL,
+    especificaciones
+  });
+
+  bicycle.save((err, user) => {
+    if (err) return res.status(400).json({ message: err });
+
+    res.status(201);
+    res.json({
+      message: 'created',
+      bicycle
     });
   });
 });
