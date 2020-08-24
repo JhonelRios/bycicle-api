@@ -70,13 +70,13 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/bicycles', (req, res) => {
-  BicycleSchema.find({}, (err, bicycle) => {
+  BicycleSchema.find({}, (err, bicycles) => {
     if (err) return res.status(500).json({ message: err });
-    if (!bicycle) return res.status(400).json({ message: 'Not found' });
+    if (!bicycles) return res.status(400).json({ message: 'Not found' });
 
     res.status(200);
     res.json({
-      bicycle
+      bicycles
     });
   });
 });
@@ -103,6 +103,20 @@ app.post('/bicycles', (req, res) => {
     });
   });
 });
+
+app.get('/bicycles/:id', (req, res) => {
+  const { id } = req.params;
+
+  BicycleSchema.findOne({ _id: id }, (err, bicycle) => {
+    if (err) return res.status(500).json({ message: err });
+    if (!bicycle) return res.status(400).json({ message: 'Not found' });
+
+    res.status(200);
+    res.json({
+      bicycle
+    });
+  })
+})
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Escuchando en el puerto 3000');
