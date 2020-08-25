@@ -115,8 +115,21 @@ app.get('/bicycles/:id', (req, res) => {
     res.json({
       bicycle
     });
-  })
-})
+  });
+});
+
+app.delete('/bicycles/:id', (req, res) => {
+  const { id } = req.params;
+
+  BicycleSchema.deleteOne({ _id: id }, (err) => {
+    if (err) return res.status(500).json({ message: err });
+
+    res.status(200);
+    res.json({
+      message: `${id} deleted`
+    });
+  });
+});
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Escuchando en el puerto 3000');
