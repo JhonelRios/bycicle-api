@@ -1,10 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 
 const UserSchema = require('./models/userSchema');
 const BicycleSchema = require('./models/bicycleSchema');
+
+const calidadApi = require('./routes/calidad');
 
 const app = express();
 
@@ -38,7 +41,7 @@ app.post('/login', (req, res) => {
     if (err) return res.status(500).json({ message: err });
     if (!user) return res.status(400).json({ message: 'Not found' });
 
-    if (body.password !== user.password) {
+    if (!bcrypt.compareSync(body.password, user.password)) {
       return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
     }
 
@@ -55,7 +58,7 @@ app.post('/register', (req, res) => {
   const user = new UserSchema({
     name,
     email,
-    password
+    password: bcrypt.hashSync(password, 10)
   });
 
   user.save((err, user) => {
@@ -130,6 +133,8 @@ app.delete('/bicycles/:id', (req, res) => {
     });
   });
 });
+
+calidadApi(app);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Escuchando en el puerto 3000');
