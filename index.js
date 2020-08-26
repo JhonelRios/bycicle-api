@@ -58,6 +58,7 @@ app.post('/register', (req, res) => {
   const user = new UserSchema({
     name,
     email,
+    dni,
     password: bcrypt.hashSync(password, 10)
   });
 
