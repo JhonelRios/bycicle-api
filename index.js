@@ -53,7 +53,7 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, dni, password } = req.body;
 
   const user = new UserSchema({
     name,
