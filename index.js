@@ -7,8 +7,6 @@ const cors = require('cors');
 const UserSchema = require('./models/userSchema');
 const BicycleSchema = require('./models/bicycleSchema');
 
-const calidadApi = require('./routes/calidad');
-
 const app = express();
 
 app.use(cors());
@@ -134,8 +132,6 @@ app.delete('/bicycles/:id', (req, res) => {
     });
   });
 });
-
-calidadApi(app);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Escuchando en el puerto 3000');
